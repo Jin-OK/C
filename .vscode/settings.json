@@ -2,5 +2,8 @@
     "code-runner.runInTerminal": false,
     "terminal.integrated.defaultProfile.windows": "Windows PowerShell",
     "files.autoGuessEncoding": true,
-    "files.encoding": "gb18030"
+    "files.encoding": "gb18030",
+    "files.associations": {
+        "stdio.h": "c"
+    }
 }
