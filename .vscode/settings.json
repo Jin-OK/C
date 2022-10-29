@@ -4,6 +4,7 @@
     "files.autoGuessEncoding": true,
     "files.encoding": "gb18030",
     "files.associations": {
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "windows.h": "c"
     }
 }

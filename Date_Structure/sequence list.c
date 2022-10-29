@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define MAXSIZE 100
+#define MAXSIZE 50
 #define OK 1
 #define ERROF 0
 
@@ -11,13 +11,12 @@ typedef struct                                                           //∂®“ÂÀ
 {
     ElemType *arr;
     ElemType length;
-    ElemType j;                                                         //”√¿¥ ‰≥ˆ”√
- }SqList;
+}SqList;
 
 
 
 Status InitList(SqList *L);                                              //≥ı ºªØ∂®“Â
-Status LengthList(SqList *L);                                            //≥§∂»∂®“Â
+Status InpthList(SqList *L);                                             //≥§∂»∂®“Â
 Status InputList(SqList *L);                                             // ‰»Î∂®“Â
 Status GetList(SqList *L);                                               //»°÷µ∂®“Â
 Status LocateList(SqList *L);                                            //≤È’“∂®“Â
@@ -31,20 +30,19 @@ Status OutList(SqList *L);                                               // ‰≥ˆ∂
 
 ElemType main()                                                          //÷˜∫Ø ˝»Îø⁄‘⁄’‚¿Ô£°£°£°
 {
-    SqList *L,a;                                                          //À≥–Ú±Ì÷∏’Î±‰¡ø
+    SqList *L,a;                                                         //À≥–Ú±Ì÷∏’Î±‰¡ø
     L = &a;
     int n,i,t = 16;
     InitList(L);
-    LengthList(L);
     InputList(L);
     printf("What do you want to do?\n");
-    for(i=0;i<t;i++)                                                    //±„”⁄≤Èø¥
+    for(i=0;i<t;i++)                                                 
     {
-        printf("1-»°÷µ\t2-≤È’“\n3-≤Â»Î\t4-…æ≥˝\n5-ÃÊªª\t6-«Â≥˝\n7- ‰≥ˆ\t0-ÕÀ≥ˆ\n\t");
+        printf("1-»°÷µ\t2-≤È’“\n3-≤Â»Î\t4-…æ≥˝\n5-ÃÊªª\t6-«Â≥˝\n7- ‰≥ˆ\t8-≥§∂»\n\t0-ÕÀ≥ˆ\n\t");
         scanf("%d",&n);
         switch(n)
         {
-            case 0:               return 0;
+            case 0:    free(L->arr);           return 0;
             case 1:GetList(L);    break;
             case 2:LocateList(L); break;
             case 3:InterList(L);  break;
@@ -52,6 +50,7 @@ ElemType main()                                                          //÷˜∫Ø 
             case 5:ReplaceList(L);break;
             case 6:ClearList(L);  break;
             case 7:OutList(L);    break;
+            case 8:InpthList(L);  break;
             default :printf("ƒ„ª·≤ªª· ‰»Î∞°£ø÷ÿ–¬ ‰»Î:\n");break;      
         }
     }
@@ -72,24 +71,14 @@ Status InitList(SqList *L)                                              //1°¢≥ı 
     }
     else
     {
-    printf("The order table was initialized successfully!\n");
+    printf("The order table was initialized Successfully!\n");
     return OK;
     }
 }
 
-Status LengthList(SqList *L)                                               //2°¢À≥–Ú±Ìµƒ≥§∂»≤Ÿ◊˜
+Status InpthList(SqList *L)                                               //2°¢À≥–Ú±Ìµƒ≥§∂» ‰≥ˆ≤Ÿ◊˜
 {
-    int n;
-    printf("How many elements do you want to enter?\n");
-    scanf("%d",&n);
-    if(n<=0 || n>MAXSIZE)
-         return ERROF;
-    else
-    {
-        L->length = n;
-        printf("Operate successfully!\n");
-        return OK;
-    }
+    printf("The current length of the order table is : %d\n",L->length);
 }
 
 Status InputList(SqList *L)                                                //3°¢À≥–Ú±Ìµƒ ‰»Î≤Ÿ◊˜
@@ -97,13 +86,13 @@ Status InputList(SqList *L)                                                //3°¢
     int i,n;
     printf("How many do you want to enter:\n");
     scanf("%d",&n);
-    if(n<0 || n>=L->length)
+    if(n<=0 || n>=MAXSIZE)
         return ERROF;
-    L->j = n;
+    L->length = n;
     printf("Please enter it as follows:\n");
     for(i=0;i<n;i++)
          scanf("%d",&(L->arr[i]));
-    printf("Operate successfully!\n");
+    printf("Operate Successfully!\n");
     return OK;
 }
 
@@ -112,7 +101,7 @@ Status GetList(SqList *L)                                                //4°¢À≥
     int m,k;
     printf("What do you want?\n");
     scanf("%d",&k);
-    if(k<0 || k>=L->j)
+    if(k<0 || k>=L->length)
         return ERROF;
     m = L->arr[k-1];
     printf("Here's what you get: %d\n",m);
@@ -125,13 +114,13 @@ Status LocateList(SqList *L)                                              //5°¢À
     int i,t;
     printf("Which one are you looking for?\n");
     scanf("%d",&t);
-    for(i=0;i<L->j;i++)
+    for(i=0;i<L->length;i++)
     {
         if(t==L->arr[i])
         {
              printf("Here's what you get: arr[%d] = %d\n",i,t);
         }
-        else if(i+1 == L->j)
+        else if(i+1 == L->length)
         {
             printf("NO Found!\n");
             return OK;
@@ -145,7 +134,7 @@ Status InterList(SqList *L)                                              //6°¢À≥
     int k,num,i;
     printf("Which do you want to insert after?\n");
     scanf("%d",&k);
-    if(k<1 || k>=L->length-1)
+    if(k<1 || k>=MAXSIZE)
     {
         printf("NO Operate!");
         return ERROF;
@@ -156,8 +145,7 @@ Status InterList(SqList *L)                                              //6°¢À≥
         L->arr[i+1] = L->arr[i];
     L->arr[k] = num;
     ++L->length;
-    ++L->j;
-    printf("Operate successfully!\n");
+    printf("Operate Successfully!\n");
     return OK;
 }
 
@@ -175,8 +163,7 @@ Status DeleteList(SqList *L)                                            //7°¢À≥–
      for(i=y-1;i<L->length-1;i++)
         L->arr[i] = L->arr[i+1];
     --L->length;
-    --L->j;
-    printf("Operate successfully!\n");
+    printf("Operate Successfully!\n");
     return OK;
 }
 
@@ -194,16 +181,15 @@ Status ReplaceList(SqList *L)                                           //8°¢À≥–
     printf("What number do you want to replace?\n");
     scanf("%d",&num);
     L->arr[r-1] = num;
-     printf("Operate successfully!\n");
+     printf("Operate Successfully!\n");
     return OK;
 }
 
 
-Status ClearList(SqList *L)                                              //9°¢À≥–Ú±Ìµƒ«Â≥˝≤Ÿ◊˜
+Status ClearList(SqList *L)                                             //9°¢À≥–Ú±Ìµƒ«Â≥˝≤Ÿ◊˜
 {
     L->length = 0;
-    L->j = 0;
-     printf("Operate successfully!\n");
+     printf("Operate Successfully!\n");
     return OK;
 }
 
@@ -211,7 +197,7 @@ Status ClearList(SqList *L)                                              //9°¢À≥
 Status OutList(SqList *L)                                               //10°¢À≥–Ú±Ìµƒ ‰≥ˆ
 {
     int i;
-    for(i=0;i<L->j;i++)
+    for(i=0;i<L->length;i++)
         printf("%4d",L->arr[i]);
         printf("\n");
         return OK;
