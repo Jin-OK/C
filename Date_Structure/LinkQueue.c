@@ -28,9 +28,10 @@ Status DeQueue(LinkQueue *Q,QElemType *e);        //出队声明
 Status Judge(LinkQueue *Q);                 //判队空
 Status GetQueue(LinkQueue *Q);   //查队
 
+
 Status main()                               //主函数
 {
-    int k,i,n = 0,decide1,decide2;
+   int k,i,n = 0,decide1,decide2;
     char name[MAXSIZE];
     LinkQueue a,b,*Q1,*Q2;
     Q1 = &a;
@@ -88,10 +89,8 @@ Status main()                               //主函数
                         default:
                         printf("输入错误，重新输入！\n");
                             break;
-
                     } 
-                }
-                    
+                }             
             case 2:
              if(Judge(Q2)==0)
                         printf("急诊没有人排队！\n");
@@ -110,7 +109,21 @@ Status main()                               //主函数
                         n = GetQueue(Q1);
                         printf("\n共 %d 人！\n\n",n);
                     }      break;
-            case 3:        break;
+            case 3: if(Judge(Q2)!=0)
+                    {
+                        DeQueue(Q2,name);
+                        printf("现在是急诊的出队,名字是： %s\n\n",name);
+                        continue;
+                    }
+                    if(Judge(Q2)==0 && Judge(Q1)!=0)
+                    {
+                        
+                        DeQueue(Q1,name);
+                        printf("现在是普通诊的出队,名字是： %s\n\n",name);continue;
+                    }
+                    if(Judge(Q1)==Judge(Q2) && Judge(Q2)==0)
+                        printf("已经没有人了！\n\n");
+                   break;
             case 4:printf("退出系统！\n");
                     free(Q1);free(Q2);
                      return 0;
