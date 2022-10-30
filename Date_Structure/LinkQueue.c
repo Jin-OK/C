@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #define MAXSIZE 10
+#define MOREPOPLE 100
 #define OK 1
 #define EORROR 0
 
@@ -25,11 +26,11 @@ Status InitQueue(LinkQueue *Q);   //初始化声明
 Status EnQueue(LinkQueue *Q,QElemType *ch);     //入队声明
 Status DeQueue(LinkQueue *Q,QElemType *e);        //出队声明
 Status Judge(LinkQueue *Q);                 //判队空
-QElemType GetQueue(LinkQueue *Q);   //查队
+Status GetQueue(LinkQueue *Q);   //查队
 
 Status main()                               //主函数
 {
-    int i,k,n,decide;
+    int k,i,n = 0,decide1,decide2;
     char name[MAXSIZE];
     LinkQueue a,b,*Q1,*Q2;
     Q1 = &a;
@@ -37,26 +38,84 @@ Status main()                               //主函数
     InitQueue(Q1);
     InitQueue(Q2);
     printf("\t医院诊室候诊系统\n");
-    printf("1-输入数据      2-显示排队\n3-开始就诊      4-退出系统\n");
-    scanf("%d",&decide);
     for(k=0;k<16;k++)
     {
-        switch (decide)
+    De1:
+        printf("1-输入数据      2-显示排队\n3-开始就诊      4-退出系统\n");
+        scanf("%d",&decide1);
+        switch (decide1)
         {
-            case 1: 
-                    printf("输入以 # 为结束！\n");
-                    while(name != "#")
+            case 1:
+                for(i=0;i<MOREPOPLE;i++)
+                {
+                    printf("请选择输入类型：1-普通诊\t2-急诊 \t  3-退出输入\n");
+                    scanf("%d",&decide2);
+                    switch(decide2)
                     {
-                        printf("请输入名字： ");
-                        gets(name);
-                        EnQueue(Q1,name);
-                        printf("存入成功！\n");
+                        case 1:
+                        printf("输入以 # 为结束！\n");
+                        while(1)
+                         {
+                            printf("请输入名字： ");
+                            scanf("%s",name);
+                            name[strlen(name)] = '\0';
+                            if(strcmp("#",name)!=0)
+                            {
+                                EnQueue(Q1,name);
+                                printf("存入成功！\n");
+                            }
+                            else break;
+                           
+                        }      break;
+                        case 2:
+                        printf("输入以 # 为结束！\n");
+                        while(1)
+                         {
+                            printf("请输入名字： ");
+                            scanf("%s",name);
+                            name[strlen(name)] = '\0';
+                            if(strcmp("#",name)!=0)
+                            {
+                                EnQueue(Q2,name);
+                                printf("存入成功！\n");
+                            }
+                            else break;
+                           
+                        }      break;
+                        case 3:
+                        printf("退出输入！\n");
+                        goto De1;
+                        default:
+                        printf("输入错误，重新输入！\n");
+                            break;
+
+                    } 
+                }
+                    
+            case 2:
+             if(Judge(Q2)==0)
+                        printf("急诊没有人排队！\n");
+                    else
+                    {
+                        printf("急诊有以下人排队：\n");
+                        n = GetQueue(Q2);
+                        printf("\n共 %d 人！\n",n);
+                    } 
+                n = 0;
+            if(Judge(Q1)==0)
+                        printf("\n普通诊没有人排队！\n\n");
+                    else
+                    {
+                        printf("\n普通诊有以下人排队：\n\n");
+                        n = GetQueue(Q1);
+                        printf("\n共 %d 人！\n\n",n);
                     }      break;
-            case 2:        break;
             case 3:        break;
-            case 4:printf("退出系统！\n"); return 0;
+            case 4:printf("退出系统！\n");
+                    free(Q1);free(Q2);
+                     return 0;
             default:printf("输入错误，重新输入！\n");
-                    scanf("%d",&decide);        break;
+                          break;
         }
     }
     return 0;
@@ -87,7 +146,6 @@ Status EnQueue(LinkQueue *Q,QElemType *ch)      //定义入队
     p->next = NULL;
     Q->rear->next = p;                      //尾插法
     Q->rear = p;
-    free(p);
     return OK;
 }
 
@@ -111,20 +169,21 @@ Status DeQueue(LinkQueue *Q,QElemType *e)       //定义出队
 Status Judge(LinkQueue *Q)              //定义判空
 {
     if(Q->front==Q->rear)
-        return OK;
-    else
         return 0;
+    else
+        return OK;
 }
 
-QElemType GetQueue(LinkQueue *Q)        //定义查队
+Status GetQueue(LinkQueue *Q)           //定义查队
 {
-    int i;
-    QueuePtr p;
+    int i = 0;
+    QNode* p;
     p = Q->front;
-    while(p->next!=NULL)
+   while(p->next!=NULL)
     {
+        i++;
         p = p->next;
-        return p->data;
+        puts(p->data);
     }
-    return p->data;                     //返回最后一个元素
+    return i;
 }
