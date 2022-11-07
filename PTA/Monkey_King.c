@@ -23,7 +23,6 @@ Status main()
     scanf("%d%d",&n,&m);
     InputLink(L,n);
     DoLink(L,n,m);
-	//free(L);
     return 0;
 }
 
